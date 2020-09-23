@@ -21,11 +21,12 @@ public final class Main {
         
         ArrayList<String> options = new ArrayList<>();
         options.add("1. Browse for cats");
-        options.add("2. Exit");
+        options.add("2. List my favorites");
+        options.add("3. Exit");
         
         do {
-            String option = (String) JOptionPane.showInputDialog(null, "Cats App", 
-                "Choose an option", JOptionPane.INFORMATION_MESSAGE, null, options.toArray(), options.get(0));
+            String option = (String) JOptionPane.showInputDialog(null, "Choose an option", "Cats App", 
+                JOptionPane.INFORMATION_MESSAGE, null, options.toArray(), options.get(0));
             
             selection = options.indexOf(option);
             
@@ -37,8 +38,15 @@ public final class Main {
                         e.printStackTrace();
                     }                    
                     break;
+                case 1:
+                    try {
+                        service.listBookmarks();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }                    
+                    break;
             }
-        } while (selection != 1);
+        } while (selection != options.size() - 1);
     }
     
 }
