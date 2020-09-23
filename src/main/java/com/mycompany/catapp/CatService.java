@@ -9,7 +9,15 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,9 +42,34 @@ public class CatService {
         
         Gson gson = new Gson();
         Cat[] cats = gson.fromJson(jsonData, Cat[].class);
+                
+        HttpURLConnection httpcon = (HttpURLConnection) new URL(cats[0].getUrl()).openConnection();
+        httpcon.addRequestProperty("User-Agent", "");
+        BufferedImage bufferedImage = ImageIO.read(httpcon.getInputStream());
+        ImageIcon catImage = new ImageIcon(bufferedImage);
         
-        for (Cat cat : cats) {
-            System.out.println("--- " + cat);
+        if (catImage.getIconWidth() > 800) {
+            Image image = catImage.getImage();
+            Image rescaling = image.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+            catImage = new ImageIcon(rescaling);
         }
+        
+        int selection = -1;
+        
+        ArrayList<String> options = new ArrayList<>();
+        options.add("1. See other picture");
+        options.add("2. Go back");
+        
+        String option = (String) JOptionPane.showInputDialog(null, "Cat id: " + cats[0].getId(),
+            "Choose an option", JOptionPane.INFORMATION_MESSAGE, catImage, options.toArray(), options.get(0));
+        
+        selection = options.indexOf(option);        
+        
+        switch (selection) {
+            case 0:
+                showCats();
+                break;
+        }
+        
     }
 }
