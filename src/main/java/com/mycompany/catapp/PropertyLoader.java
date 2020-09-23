@@ -11,24 +11,57 @@ import java.util.Properties;
 
 /**
  *
- * @author juan
+ * @author jcalvarezj
  */
 public final class PropertyLoader {
     
+    private final static String PROPERTIES_FILE = "config.properties";    
+    private static PropertyLoader instance;
+
+    private PropertyLoader() {
+    }
+    
+    public static PropertyLoader getInstance() {
+        if (instance == null)
+            instance = new PropertyLoader();
+        
+        return instance;
+    }
+    
     public String getApiKey() {
         Properties props = new Properties();
-        String propertiesFile = "config.properties";
         
         String result = "";
         
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFile)) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
             
             if (inputStream != null)
                 props.load(inputStream);
             else
-                throw new FileNotFoundException("Property file " + propertiesFile + " not found in ClassPath");
+                throw new FileNotFoundException("Property file " + PROPERTIES_FILE + " not found in ClassPath");
             
             result = props.getProperty("apiKey");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return result;
+    }
+    
+    public String getBaseUrl() {
+        Properties props = new Properties();
+        
+        String result = "";
+        
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+            
+            if (inputStream != null)
+                props.load(inputStream);
+            else
+                throw new FileNotFoundException("Property file " + PROPERTIES_FILE + " not found in ClassPath");
+            
+            result = props.getProperty("baseUrl");
             
         } catch (Exception e) {
             e.printStackTrace();

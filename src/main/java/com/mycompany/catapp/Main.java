@@ -5,16 +5,40 @@
  */
 package com.mycompany.catapp;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
- * @author juan
+ * @author jcalvarezj
  */
 public final class Main {
+    
     public static void main(String[] args) {
-        System.out.println("Gonna read!!!");
+        CatService service = new CatService();
         
-        PropertyLoader loader = new PropertyLoader();
+        int selection = -1;
         
-        System.out.println("---> " + loader.getApiKey());
+        ArrayList<String> options = new ArrayList<>();
+        options.add("1. Browse for cats");
+        options.add("2. Exit");
+        
+        do {
+            String option = (String) JOptionPane.showInputDialog(null, "Cats App", 
+                "Choose an option", JOptionPane.INFORMATION_MESSAGE, null, options.toArray(), options.get(0));
+            
+            selection = options.indexOf(option);
+            
+            switch(selection) {
+                case 0:
+                    try {
+                        service.showCats();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }                    
+                    break;
+            }
+        } while (selection != 1);
     }
+    
 }
